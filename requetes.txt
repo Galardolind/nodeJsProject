@@ -1,0 +1,175 @@
+/*\ Bug dans les url des thumbnail des films/jeux video il y a commons au milieu au lieu de en
+FAUX : http://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Nick_of_time.jpg/200px-Nick_of_time.jpg
+BON :  http://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Nick_of_time.jpg/200px-Nick_of_time.jpg
+
+Film:
+
+SELECT DISTINCT ?label ?description (group_concat( DISTINCT ?star_name ; separator = "<br />") as ?actors) ?thumbnail WHERE { 
+?film_title rdf:type <http://dbpedia.org/ontology/Film> . 
+?film_title rdfs:comment ?description . 
+?film_title dbpedia-owl:thumbnail ?thumbnail . 
+?film_title foaf:name ?label . 
+?film_title dbpedia-owl:starring ?star . 
+?star foaf:name ?star_name . 
+?film_title dbpedia-owl:country ?country FILTER (fn:contains(?country , "United_States") || fn:contains(?country , "France")) . 
+FILTER (langMatches(lang(?description),"en")) 
+} 
+LIMIT 1000
+
+
+
+Comediens : 
+
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+
+SELECT DISTINCT ?label ?description (group_concat( DISTINCT ?title; separator = "<br />") as ?films) ?thumbnail
+where {?film_title rdf:type <http://dbpedia.org/ontology/Film> .
+?film_title  foaf:name ?title.
+?film_title dbpedia-owl:starring ?star .
+?star foaf:name ?label . 
+?star dbpedia-owl:thumbnail ?thumbnail.
+?star rdfs:comment ?description . 
+?film_title dbpedia-owl:country ?country FILTER (fn:contains(?country , "United_States") || fn:contains(?country , "France")) . 
+FILTER (langMatches(lang(?description ),"en")) 
+}limit 1000
+
+
+
+
+Animaux : 
+
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dbpprop: <http://dbpedia.org/property/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+
+SELECT DISTINCT ?label ?description ?thumbnail  WHERE { 
+?jeu rdf:type <http://dbpedia.org/ontology/Animal>  .
+?jeu rdfs:comment ?description . 
+?jeu dbpedia-owl:thumbnail ?thumbnail .  
+?jeu rdfs:label ?label .
+FILTER (langMatches(lang(?description ),"en")).
+FILTER (langMatches(lang(?label ),"en")).
+}limit 1000
+
+
+
+Armes : 
+
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dbpprop: <http://dbpedia.org/property/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+
+SELECT DISTINCT ?label ?description ?thumbnail  WHERE { 
+?Weapon rdf:type <http://dbpedia.org/ontology/Weapon>  .
+?Weapon rdfs:comment ?description . 
+?Weapon dbpedia-owl:thumbnail ?thumbnail .  
+?Weapon rdfs:label ?label .
+?Weapon dbpedia-owl:type ?type .
+FILTER (?type = dbpedia:Carbine || ?type = dbpedia:Assault_rifle || ?type = dbpedia:Semi-automatic_rifle || ?type = dbpedia:Anti-materiel_rifle).
+FILTER (langMatches(lang(?description ),"en")).
+FILTER (langMatches(lang(?label ),"en")).
+}limit 1000
+
+
+
+/*\ Attention bug de commons sur les jeux video
+
+Jeux Video : 
+
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dbpprop: <http://dbpedia.org/property/>
+PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
+
+SELECT DISTINCT ?label ?description ?thumbnail  WHERE { 
+?jeu rdf:type <http://dbpedia.org/ontology/VideoGame>  .
+?jeu rdfs:comment ?description . 
+?jeu dbpedia-owl:thumbnail ?thumbnail .  
+?jeu rdfs:label ?label .
+FILTER (langMatches(lang(?description ),"en")).
+FILTER (langMatches(lang(?label),"en")).
+}limit 1000
+
+
+
+Sports : 
+
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dbpprop: <http://dbpedia.org/property/>
+PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
+
+SELECT DISTINCT ?label ?description ?thumbnail  WHERE { 
+?jeu rdf:type <http://dbpedia.org/ontology/Sport>  .
+?jeu rdfs:comment ?description . 
+?jeu dbpedia-owl:thumbnail ?thumbnail .  
+?jeu rdfs:label ?label .
+FILTER (langMatches(lang(?description ),"en")).
+FILTER (langMatches(lang(?label),"en")).
+}limit 1000
+
+
+
+
+Pays:
+
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dbpprop: <http://dbpedia.org/property/>
+PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
+
+SELECT DISTINCT ?label ?description ?thumbnail  WHERE { 
+?PopulatedPlace rdf:type <http://dbpedia.org/ontology/Country>  .
+?PopulatedPlace rdfs:comment ?description . 
+?PopulatedPlace dbpedia-owl:thumbnail ?thumbnail .  
+?PopulatedPlace rdfs:label ?label .
+?PopulatedPlace dbpprop:hdiYear ?year.
+FILTER(?year > 2010).
+FILTER (langMatches(lang(?description ),"en")).
+FILTER (langMatches(lang(?label),"en")).
+}limit 1000
+
+
+
+/*\ Du html est présent dans les trucs d'histoire, merci les abrutis.
+
+Histoire : 
+
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dbpprop: <http://dbpedia.org/property/>
+PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
+
+SELECT DISTINCT ?label ?description ?thumbnail  WHERE { 
+?MilitaryConflict rdf:type <http://dbpedia.org/ontology/MilitaryConflict>  .
+?MilitaryConflict rdfs:comment ?description . 
+?MilitaryConflict dbpedia-owl:thumbnail ?thumbnail .  
+?MilitaryConflict rdfs:label ?label .
+FILTER (langMatches(lang(?description ),"en")).
+FILTER (langMatches(lang(?label),"en")).
+}limit 1000
+
+
+
+People :
+ 
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dbpprop: <http://dbpedia.org/property/>
+PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
+PREFIX dc:	<http://purl.org/dc/elements/1.1/>
+
+
+SELECT DISTINCT ?label ?description ?thumbnail WHERE { 
+?Agent rdf:type <http://dbpedia.org/ontology/Agent>  .
+?Agent rdfs:comment ?description . 
+?Agent dbpedia-owl:thumbnail ?thumbnail .  
+?Agent rdfs:label ?label .
+?Agent dbpprop:shortDescription ?short .
+?Agent dbpprop:birthDate ?date.
+FILTER (?date >=xsd:date("1980-01-01")).
+FILTER (fn:contains(?short,'celebrity') || fn:contains(?short,'American musician') || fn:contains(?short,'actress') || fn:contains(?short,'singer')).
+FILTER (langMatches(lang(?description ),"en")).
+FILTER (langMatches(lang(?label),"en")).
+}limit 1000
+
+
+

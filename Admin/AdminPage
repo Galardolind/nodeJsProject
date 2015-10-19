@@ -1,0 +1,76 @@
+<center>
+	<p>Welcome Master </p>
+	<div id="DBList">
+	</div>
+	<p></p>
+	<table>
+		<tr>
+			<td>
+				<p><b>The request will be sent with domain adress and 2 optional choice like this exemple </b></p>
+				<p><b> ' Domain adress' + ' Starting options '+ request + ' Ending options ' </b></p>
+				<p><b>Domain adress :&nbsp;&nbsp </b><input id="domainName" style="width:507px;" value="dbpedia.org" /></p>
+				<p><b>Domain starting options : &nbsp;&nbsp</b><input id="domainOption1" style="width:450px;" value="/sparql?default-graph-uri=http://dbpedia.org&query=" /></p>
+				<p><b>Domain ending options :&nbsp;&nbsp </b><input id="domainOption2" style="width:457px;" value="&output=json" /></p>
+			</td>
+			<td>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<textarea id="requestArea" rows="50" cols="58" style="widht:500px;height:300px;border:solid 1px black;
+				font-family:tahoma; background-color:lightsteelblue;"></textarea> 
+			</td>
+			<td>
+			<textarea id="responseArea" rows="50" cols="100" style="widht:500px;height:300px;border:solid 1px black;
+				font-family:tahoma; background-color:lightsteelblue;" readonly="readonly" >
+					resultat de la requete
+			</textarea> 
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input class="adminButton" type="button" id="submitQuery" value="submit" />
+			</td>
+			<td>
+				<p><b>File name to save :&nbsp;&nbsp </b><input id="fileName" style="width:150px;" value="xxxxxx.json" />&nbsp;&nbsp<input class="adminButton" type="button" id="saveDB" value="save" /></p>
+			</td>
+		</tr>
+	</table>
+	<p></p>
+	<script>
+		// Database Part
+		$('#showDB').click(function(){socket.emit('adminZone', {cmd: "showDB", replaceShit: $("#replaceShit").is(":checked")});});
+		$('#submitQuery').click(function(){socket.emit('adminZone', {cmd: "query" ,query: $("#requestArea").val(), domainName: $("#domainName").val(), domainOption1: $("#domainOption1").val(), domainOption2: $("#domainOption2").val()});});
+		$('#saveDB').click(function(){socket.emit('adminZone', {cmd: "saveDB" , fileName: $("#fileName").val()});});
+		$('#saveDB2').click(function(){socket.emit('adminZone', {cmd: "saveDB" , fileName: $("#fileName2").val()});});
+		$('#filterByLabel').click(function(){socket.emit('adminZone', {cmd: "filter", replaceShit: $("#replaceShit").is(":checked")});});
+		$('#previousP').click(function(){socket.emit('adminZone', {cmd: "previousPage", replaceShit: $("#replaceShit").is(":checked")});});
+		$('#nextP').click(function(){socket.emit('adminZone', {cmd: "nextPage", replaceShit: $("#replaceShit").is(":checked")});});
+		socket.on('requestRsp',function(data){
+			$('#responseArea').val('');
+			$('#responseArea').val(data);
+		});
+		socket.on('ShowDb',function(data){
+			$('#DbVisualization').empty();
+			$('#DbVisualization').append(data);
+		});
+		socket.on('DBList',function(data){
+			$('#DBList').empty();
+			$('#DBList').append(data);
+		});
+		socket.on('DBlistAdd',function(data){
+			$('#DBListAdd').empty();
+			$('#DBListAdd').append(data);
+		});
+		function clicDelete(lineNumber){
+			socket.emit('adminZone', {cmd: "deleteLine" , number: lineNumber, replaceShit: $("#replaceShit").is(":checked")});
+		}
+		
+		// Settings Part
+		$('#setTime').click(function(){socket.emit('adminZone', {cmd: "setTime", time: $("#tSecond").val()});});
+		$('#setMinimumPlayer').click(function(){socket.emit('adminZone', {cmd: "nbPlayer", nb: $("#nbPlayer").val()});});
+		$('#addAdmin').click(function(){socket.emit('adminZone', {cmd: "addAdmin", name: $("#addAdmin").val()});});
+		$('#changePwd').click(function(){socket.emit('adminZone', {cmd: "chgPwd", pwd: $("#chgPwd").val()});});
+		
+	</script>
+</center>
