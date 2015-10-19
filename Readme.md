@@ -1,1 +1,3 @@
-This is a multiplayer pictionary project with NodeJS# nodeJsProject 
+# nodeJsProject 
+
+Watch the wiki to get more informations.
