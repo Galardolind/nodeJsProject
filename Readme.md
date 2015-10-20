@@ -1,3 +1,4 @@
 # nodeJsProject 
 
-Watch the wiki to get more informations.
+Watch [the Wiki](https://github.com/Galardolind/nodeJsProject/wiki) to get more informations.
+
